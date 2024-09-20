@@ -1,5 +1,7 @@
 
-function todoReducer(state, action) {
+// function todoReducer(state, action) 
+    function TodoReducers(state = [], action) {
+
     if(action.type === 'add_todo') {
         let todoData = action.payload.todoData;
         return [
@@ -33,4 +35,4 @@ function todoReducer(state, action) {
         return state;
     }
 }
-export default todoReducer;
+export default TodoReducers;
