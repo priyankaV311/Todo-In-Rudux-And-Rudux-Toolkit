@@ -1,9 +1,26 @@
 import React, { useContext } from 'react';
 import Todo from '../Todo/Todo';
 import TodoContext from '../../context/TodoContext';
+import TodoDispatchContext from "../../context/TodoDispatchContext";
 
 function TodoList() {
-    const { list, setList } = useContext(TodoContext);
+    // const { list, setList } = useContext(TodoContext);
+    const { list } = useContext(TodoContext);
+    const { dispatch } = useContext(TodoDispatchContext)
+
+
+    function onFinished(todo, isFinished) {
+        dispatch({ type: 'finish_todo', payload: { todo, isFinished: isFinished } });
+    }
+
+    function onDelete(todo) {
+        dispatch({ type: 'delete_todo', payload: { todo } });
+    }
+
+
+    function onEdit(todo, todoText) {
+        dispatch({ type: 'edit_todo', payload: { todo, todoText } });
+    }
 
     return (
         <div>
@@ -13,29 +30,33 @@ function TodoList() {
                     id={todo.id} 
                     todoData={todo.todoData} 
                     isFinished={todo.finished}
-                    changeFinished={(isFinished) => {
-                        console.log("isFinished", isFinished);
-                        const updatedList = list.map((t) => {
-                            if (t.id === todo.id) {
-                                return { ...t, finished: isFinished }; // Create a new object
-                            }
-                            return t;
-                        });
-                        setList(updatedList);
-                    }}
-                    onDelete={() => {
-                        const updatedList = list.filter(t => t.id !== todo.id); // Use strict equality
-                        setList(updatedList);
-                    }} 
-                    onEdit={(todoText) => {
-                        const updatedList = list.map((t) => {
-                            if (t.id === todo.id) {
-                                return { ...t, todoData: todoText }; // Create a new object
-                            }
-                            return t;
-                        });
-                        setList(updatedList);
-                    }}
+                    // changeFinished={(isFinished) => {
+                    //     console.log("isFinished", isFinished);
+                    //     const updatedList = list.map((t) => {
+                    //         if (t.id === todo.id) {
+                    //             return { ...t, finished: isFinished }; // Create a new object
+                    //         }
+                    //         return t;
+                    //     });
+                    //     setList(updatedList);
+                    // }}
+                    // onDelete={() => {
+                    //     const updatedList = list.filter(t => t.id !== todo.id); // Use strict equality
+                    //     setList(updatedList);
+                    // }} 
+                    // onEdit={(todoText) => {
+                    //     const updatedList = list.map((t) => {
+                    //         if (t.id === todo.id) {
+                    //             return { ...t, todoData: todoText }; // Create a new object
+                    //         }
+                    //         return t;
+                    //     });
+                    //     setList(updatedList);
+                    // }}
+
+                    changeFinished={(isFinished) => onFinished(todo, isFinished)}
+                    onDelete={() => {onDelete(todo)}} 
+                    onEdit={(todoText) => onEdit(todo, todoText)}
                 />
             ))}
         </div>
